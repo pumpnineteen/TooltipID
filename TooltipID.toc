@@ -1,4 +1,4 @@
-## Interface: 11507, 50500
+## Interface: 11507, 50501
 ## Title: TooltipID
 ## Notes: Shows id's on the tooltip
 
