@@ -24,6 +24,13 @@ local function CheckForbidden(tooltip)
     return tooltip:IsForbidden()
 end
 
+local function TextureString(texturePathOrID, size)
+    if not texturePathOrID then return "" end
+    size = size or 16
+    local textureString = string.format("|T%s:%d:%d|t", texturePathOrID, size, size)
+    return textureString
+end
+
 local function AddLine(tooltip, id, type, spacer)
     if not tooltip or not id then return end
 
@@ -34,6 +41,22 @@ local function AddLine(tooltip, id, type, spacer)
         tooltip:AddLine(" ")
     end
     tooltip:AddLine(type.."ID: ".."|cffFFFFCF"..id.."|r", 1, 1, 1)
+    tooltip:Show()
+end
+
+local function AddTextureLine(tooltip, texture, id, type, spacer)
+    if not tooltip or not id then return end
+
+    if spacer == nil then
+        spacer = true
+    end
+    if spacer then
+        tooltip:AddLine(" ")
+    end
+
+    local textureString = TextureString(texture, 16)
+
+    tooltip:AddLine(textureString.." "..type.."ID: ".."|cffFFFFCF"..id.."|r", 1, 1, 1)
     tooltip:Show()
 end
 
@@ -52,9 +75,9 @@ end
 
 local function HookAuraTooltip(tooltip, unit, index, filter, spacer)
     local name, icon, count, debuffType, duration, expirationTime, source, isStealable, nameplateShowPersonal, spellID = UnitAura(unit, index, filter)
-    print("Icon:", icon)
+    -- print("Icon:", icon)
     if not spellID or CheckForbidden(tooltip) then return end
-    AddLine(tooltip, spellID, "Aura", spacer)
+    AddTextureLine(tooltip, icon, spellID, "Aura", spacer)
 end
 
 
@@ -80,9 +103,9 @@ local function HookUnitTooltip(tooltip)
         -- Process aura tooltips 
 
         for i = 1, 40 do 
-            local name, icon, _, _, _, _, _, _, _, spellID = UnitAura(unit, i) 
+            local name, _, _, _, _, _, _, _, _, spellID = UnitAura(unit, i) 
             if name then 
-                print("Icon:", icon)
+                -- print("Icon:", icon)
                 debugger("Processing aura: " .. name .. " with Spell ID: " .. spellID)
                 HookAuraTooltip(tooltip, unit, i, nil, false) 
             end 
