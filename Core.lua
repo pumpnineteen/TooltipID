@@ -9,7 +9,6 @@ local font, fontSize, fontFlags = GameTooltipTextLeft1:GetFont()
 AuraTooltipTextLeft1:SetFont(font, fontSize - 2, fontFlags)
 
 
-
 local function debugger(message)
     if debugging then
         print(message)
@@ -53,6 +52,7 @@ end
 
 local function HookAuraTooltip(tooltip, unit, index, filter, spacer)
     local name, icon, count, debuffType, duration, expirationTime, source, isStealable, nameplateShowPersonal, spellID = UnitAura(unit, index, filter)
+    print("Icon:", icon)
     if not spellID or CheckForbidden(tooltip) then return end
     AddLine(tooltip, spellID, "Aura", spacer)
 end
@@ -80,8 +80,9 @@ local function HookUnitTooltip(tooltip)
         -- Process aura tooltips 
 
         for i = 1, 40 do 
-            local name, _, _, _, _, _, _, _, _, spellID = UnitAura(unit, i) 
+            local name, icon, _, _, _, _, _, _, _, spellID = UnitAura(unit, i) 
             if name then 
+                print("Icon:", icon)
                 debugger("Processing aura: " .. name .. " with Spell ID: " .. spellID)
                 HookAuraTooltip(tooltip, unit, i, nil, false) 
             end 
